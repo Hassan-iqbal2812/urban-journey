@@ -1,0 +1,246 @@
+[NOTES]	:
+Loops are control flow constructs tht allow a piece of code to execute repeatedly until some condition is met.
+Loops add a signinificant amount of flexibility into your programming toolkit, allowing you to do many things
+that would otherwise be difficult.
+
+For Example, lets say you wanted to print all the numbers between 1 to 10, without loops, you might try something like this:
+
+#include <iostream>
+int main()
+{
+	std::cout << "1 2 3 4 5 6 7 8 9 10" ;
+	std::cout << " done!\n";
+	return 0;
+}
+
+While thats doable, it become increasingly less os as you want to print more numbers: what f you wanted to print all the numbers between 1
+and 1000? That would be quite a bit of typing! But such a program is writable in this way because we know at compile time how many numbers
+we want to print.
+
+Now lets cnage the parameters a bit. WHat if we wanted to ask the user to enter a number and then print all the numbers beween 1 and the
+number the user entered? The nymber the user will enter isnt knowable at complie time.So how might we go about solving this?
+
+While statements
+
+The While statemtnt(also called a while loop) is the simplest of the 3 loops types that c++ provides, and it has a definition very similar to 
+that of and if statment:
+
+while (condition)
+	statment;
+
+a while statement is decalred using the while keyword. When a while statement is executed, the condition is evaluated. If the condition
+evaluaes to true, the assoicated statement executes.
+
+However, unlike and if statement, once the statement has finished executing, control return to the top of the while statement and the 
+process is sepeated. This means a while statement will keep looping for as long as the condition evaluates to true.
+
+Lets take a look at a simple while loop that prints all the numbers from 1 to 10:
+#include 
+int main()
+{
+	int count {1};
+	while(count  <= 10)
+	{
+		std::cout << count << ' ';
+		++count;
+	}
+	std::cout << "done!\n";
+	return 0;
+}
+
+Lets take a close look at what this program is doing, 1st count is initalized to 1 , which is the 1sr number well print. The condition count 
+<= 10 is true, so the statement executes.In this case, out statment is a block, so all the statements in the blck will execute. The first 
+statement in the block prints 1 and a space, and the 2nd increments count to 2. Control now returns back to the top of the while
+statement, and the condition is evaluated again. 2 <= 10 evaluate to true, so the code blcok is executed again. The loop will repeatedly
+execute until count is 11, at which point 11 <= 10 will evaluate to false, and the statement assoicated with the loop will be skipped. At 
+this point, the loop is done.
+
+While, this program is a but more code than typing all the numbers between 1 to 10, consider how easy it would be to modify the program to 
+print all the numbers between 1 and 1000: all you need to di si change count <= 10 to count <= 1000.
+
+While statements that evaluate to false initially
+note that if the condition initialy evaluates to false, the assoicated statement will not execute at all. Consider the follwing program:
+#include <iostream>
+
+int main()
+{
+	int count{15}
+	while (count <= 10)
+	{
+		std::cout << count << ' ';
+		++count;
+	}
+	std::cout << "done!\n";
+	
+	return 0;
+}
+
+the condition 15 <= 10 evaluates to false, so the associated the statement is skipped. The program continues, and the only thing printed is 
+done!.
+
+Infinie loops
+
+On the other hand, if the expression always evaluates to true, the while loop will execute forever. This is called an infinite loop. Here is an
+example of an infinite loop:
+#include <iostream>
+
+int main()
+{
+	int count {1};
+	while (count <= 10)
+	{
+		std::cout << count << ' ';
+	}
+	std::cout << '\n';
+	return 0;
+}
+
+Because count is never incremented in this program, count <= 10 will always be true. Consequemtly, the loop will never terminate, and the
+program will "11111" .... forever.
+
+Intentional infinite loops
+
+we can declare an intentional infinite loop like this:
+
+while(true)
+{
+// this loop will execute forever
+}
+
+The only way to exit an infinite loops is through a return statement, a break statement, an exit statement, a goto statementm and exception being
+thrown, or the user killing the program.
+
+Heres a silly example demonstarting this:
+#include <iostream>
+int main()
+{
+	while(true)
+	{
+		std::cout << "Loop Again (y/n)?";
+		char c{};
+		std::cin >> c;
+		if (c == 'n')
+			return 0;
+	}
+	return 0;
+}
+This program will continuosly loop until the user enters n as inputm at which point the if statement will evaluate to true and the
+associated return 0; will cause function main() to exit, terminating the program.
+
+it is common to see this kind of loop in web server applications that run continuosly abd service we requests.
+Best practice
+Favour while(true) for intentional infinite loops
+
+Loop variables
+Often, we want a loop to execute a certain number of times. To do this , it is a common to use a loop variable. often called counter. A loop
+variable is an integer that is used to count how many times a loop has executed. In the example above, the variablec count is a loop variable.
+
+Loop variables are oftern given simple names, such as i,j  or k. However, if you want to know where in you program a loop variable is
+used, and you use the search function will return half of the lines in your program! For this reason,
+some devs prefer loop variable names like iii, jjj, or kkk. Because these names are unique, this makes searching for loop variables
+much easier, and helps them stand out as loop variables.An even better idea is to use "real" variable namesm such as count, or a name that
+gives more detail about youre counting(e.g usercount)
+
+Loop variables should be singed
+Loop variables should almost always be signed, as unsigened ints can lead to unexpected issues. Consider the following code:
+#include <iostream>
+int main()
+{
+	unsigned int count {10};
+	while (count >= 0)
+	{
+		if(count == 0)
+		{
+			std::cout << "BLASTOFF!";
+		}
+		else
+		{
+			std::cout << count << ' ';
+		}
+		--count 
+	}
+	std::cout << '\n/;
+	return 0;
+}
+
+Take a look at the above example and see if you spot the error. It not very obvious. 
+It turns out , this program is an infinite loop. It starts out by printing 10 9 8 7 6 5 4 3 2 1 blastoff! as desired, but then goes off the rails,
+and starts counting down form 4294967295. Why? because the loop condition count >= 0 will never be false! when count is 0, 9 >- 0 is
+ture. Then --count is executed , and count wraps around back 4294967295 assuming 32 but integers. and since 4294967295 >= 0 is 
+true, the program continues. Because count is unsigned, it can never be negative, and because it can be negative the loop wont terminate. 
+
+Best Practice 
+Loop Variables should be of type signed int
+
+Doing something every N interations
+
+Each time a loop executes, it is called an iteration,
+Often, we want to do something every 2nd, 3rd or 4th iteration, such as print a newline. This can be easily be done by using the modulus operator
+on our counter:
+
+#include <iostream>
+int main()
+	int count {1};
+	while  (count <= 50)
+	{
+		if(count < 10)
+		{
+			std::cout << '0';
+		}
+		std::cout << count << ' ';
+		
+		if(count % 10 == 0)
+		{
+			std::cout << '\n';
+		}
+		++count;
+	}	
+	return 0;
+}
+	
+Nested Loops
+
+It is also possible to nest loops inside of other loops. In the following example , the nested loopp (which were call the inner loop ) and the outer
+loop each have thiser own counters. Note the loop expression for the inner loop makes use of the outer loops counter as well!
+#include <iostream>
+int main()
+{
+	int outer{1};
+	while(outer <= 5)
+	{
+		//For each iteration of the outer loop, the code in the body of the loop executes once
+		// Inne loops between 1 and the outher
+		int inner {1};
+		while (inner <= outer)
+		{
+			std::cout << inner ' ';
+			++inner;
+		}
+		std::cout << '\n'; // print a newline at the end of each row,
+		++outer;
+	}
+	return 0;
+}
+	
+Nested loops tend to be hard for new programmers to understandm so dont be discouraged if you find ths a bit confusing. For each iteration of
+the outer loop, the body of the outer loop will execute once. Because the outer loop body contains an inner loop, the inner loop is executed for 
+each iteration of ther outer loop.
+
+lets example how this in more detail.
+
+1st , we have an outer loop(with loop var outer) that will loop 5 times (with outer having values 1,2,3,4 and 5 successively).
+
+On the 1st iteration of th outer loop,, outer has value 1m and the the outer loop bodey executes, Inside the body of the outer loopm we have 
+another loop with loop variable inner . The inner loop iterates from 1 to outer (which has valye 1), so this inner loop will execute once, 
+printing the value 1. Then we print a newline, and increment outer to 2.
+
+On the 2ns iteration of the outer loop, outer has value 2 , and then the outer loop body executes. Inside the body of the outer loop, 
+inner iterates from 1 to outer (which now has value 2), so this inner loop will execute twice, priniting the values 1 and 2. Then we print a 
+newline and increment outer to 3.
+
+This process continues, with the inner loop printing 123, 1234 and 12345 on successive passes. Evenetually, outer is
+incremented to 6, and because the outer loop condition (outer <= 5) is then false, the outer loop is finished. Then the program ends.	
+[TASK] 	:
+
+[COMPLETED] : FALSE 
+

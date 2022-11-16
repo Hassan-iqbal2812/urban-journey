@@ -1,0 +1,90 @@
+[NOTES]	:
+#include <cstdint> // for fixed-width integers
+
+// returns the value base ^ exponent -- watch out for overflow!
+std::int64_t pow(int base, int exponent)
+{
+    std::int64_t total{ 1 };
+
+    for (int count{ 0 }; count < exponent; ++count)
+        total *= base;
+
+    return total;
+}
+
+^ The humble for loop 
+
+
+#include <iostream>
+
+int main()
+{
+    for (int i { 0 }; i < 10; ++i) // uses <
+         std::cout << i;
+
+    for (int i { 0 }; i != 10; ++i) // uses !=
+         std::cout << i;
+
+     return 0;
+}
+
+So which should we prefer? The former is the better choice, as it will terminate even if i jumps over the value 10, whereas the latter will not.
+Avoid operator!= when doing numeric comparisons in the for-loop condition.
+
+for (;;)
+    statement;
+^ infinite loop
+
+Although for loops typically iterate over only one variable, sometimes for loops need to work with multiple variables. 
+To assist with this, the programmer can define multiple variables in the init-statement,
+and can make use of the comma operator to change the value of multiple variables in the end-expression :
+
+#include <iostream>
+int main()
+{
+    for (int x{ 0 }, y{ 9 }; x < 10; ++x, --y)
+        std::cout << x << ' ' << y << '\n';
+    return 0;
+}
+
+#include <iostream>
+
+int main()
+{
+	for (char c{ 'a' }; c <= 'e'; ++c) // outer loop on letters
+	{
+		std::cout << c; // print our letter first
+
+		for (int i{ 0 }; i < 3; ++i) // inner loop on all numbers
+			std::cout << i;
+
+		std::cout << '\n';
+	}
+
+	return 0;
+}
+
+Here’s some more detail on what’s happening here. The outer loop runs first, and char c is initialized to 'a'. 
+Then c <= 'e' is evaluated, which is true, so the loop body executes. Since c is set to 'a', this first prints a.
+Next the inner loop executes entirely (which prints 0, 1, and 2). Then a newline is printed. Now the outer loop body is finished,
+so the outer loop returns to the top, c is incremented to 'b', and the loop condition is re-evaluated. 
+Since the loop condition is still true the next iteration of the outer loop begins. This prints b012\n. And so on.
+
+For statements excel when you have a counter variable. If you do not have a counter, a while statement is probably a better choice.
+
+Prefer for loops over while loops when there is an obvious loop variable.
+Prefer while loops over for loops when there is no obvious loop variable.
+
+
+
+[TASKS] : Q1
+Write a for loop that prints every even number from 0 to 20.
+[TASK] : Q2
+Write a function named sumTo() that takes an integer parameter named value, and returns the sum of all the numbers from 1 to value.
+For example, sumTo(5) should return 15, which is 1 + 2 + 3 + 4 + 5.
+Hint: Use a non-loop variable to accumulate the sum as you iterate from 1 to the input value, much like the pow() example above uses the total variable to accumulate the return value each iteration.
+[TASK] : Q3
+for (unsigned int count{ 9 }; count >= 0; --count)
+    std::cout << count << ' ';
+Ans = for loop is infinite cos count will never go negative so it will keep going. 
+[Completed] :

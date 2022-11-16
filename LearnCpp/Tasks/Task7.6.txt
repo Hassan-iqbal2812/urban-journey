@@ -1,0 +1,91 @@
+[NOTES]	: GOTO statements 
+The next kind of control flow statement well coer is the unconditional jump, An unconditional jump causes execvution to jump to another spot in the code. 
+The Term "Unconditional" means the jump always happens (unlike an if statement or switch statement, where the jump only happens conditionally based
+on the result of an expression).
+
+In C++ unconditional jummps are implemented via a GOTO statement, and the spot to jump to is identfied through use of a statment label. The following is an
+example of a goto statement and statment label:
+
+#include <iostream>
+#include <math>
+int main()
+{
+	doubel x {};
+tryAgain :
+	std::cout << "Enter a non neg number :";
+	std::cin >> x;
+	if (x < 0.0)
+		goto tryAgain;
+	std::cout << "The square root of " << x << " is " << std::sqrt(x) << '\n';
+	return 0;
+}
+In this program, the user is asked to enter a non-nega neumber. However, if a negative nymber is enterd, the program utilizes a goto statment to jump
+back to the "tryAgain" label. The user is then asked again to enter a new number. In this way, we can continually ask the user for input until he or she enters
+something valid.
+
+In the chapter on object scobe , we cover 2 kinds of scope: local (block ) scope, and file (global) scope. Statment labels utilize a 3rd kind of 
+scope: function scope, which means the label is visible throughout the function even before its porint of declaration. The "goto statement" and its
+corresponding statement label must appear in the same function.
+
+While the above example shows a "goto statment" that jumps backwards (to a preceding point in the function), "got statements" can also jump forward:
+
+#include <iostream>
+
+void printCats(bool skip)
+{
+	if(skip)
+		goto end;
+	std::cout << "cats\n";
+end:
+	; // statment labels must be associated with a statement 
+}
+int main()
+{
+	printCats(true);
+	printCats(false);
+	return 0;	
+}
+
+Beyond the jumping forward, there are couple of interesting things worth mentioning in the above progarm.
+
+First, note that "Statment labels" must be associated with a statement (hence their name: they label a statement). Because the end of the function had no 
+statment, we had to use a null statement so we had a statement to label. 2nd, we were able to jump to the statement labeled by "end" evenn though we
+hadnt declared "end" yet due to "statement labels" having function scope. No forward declaration of statement labels is necessary. 3rd its worth explicitly
+mentioning that the above progarm is poor form -- it would have been better to uas an if statement to skip the print statement than a goto statement to 
+jump over it. 
+
+
+There are 2 primary limitations to jumping: You can jump only within the bounds of a single function (You cant jump out of one function and into another),
+and if you jump forward over hte initliization of any variable that is still in scope at the location being jumped to For example :
+
+int main()
+{
+	goto skip; // err this jump is illegal cos..
+	int x {5}; // this initilized var is still in scope at statement label 'skip'
+skip:
+	x+= 3; // what would this even evaluate to if x wastn initilized?
+	return 0;
+}
+Note that you can jump backwards over a variable initliization, and the variable will be re-initilized when the initliization is executed. 
+
+
+Avoid using "goto"
+
+Use of "goto" is shunned in c++ (and other modern high level langugaes as well). Edsger W,Dijstra, a noted computer scientistm laid out the case for avoiding
+got in a famous but difficult to read paper called GO to statment consider hamfull. The primary problem with goto is that it allows programmer
+to jump aroun the code arbitraily. This create what is not so affectionatley knowns as spaghetti code. spaghetti code is code that has a path of execution that
+resembles a bowl of spaghetti (all tangled and twisted), making it extreamly difficult to follow the logic of such code.
+
+As Dijkstra say somewhat humoursly,"The qualitu of programmes is a decreasing function of the density of go to statements in the programs they produce".
+
+Almost any code written usint a goto statment can be more clearly written using other constructs in c++, such as if statements and loops. One notable
+exception is when you need to exit a nested loop but not the entier function -- in such a case, a goto to just beyond the loops is probably the cleanest solution. 
+
+
+Best practice 
+AVOID GOTO STATEMETS (UNLESS THE ALTERNATIVES ARE SIGNIFICATLY WORSE FOR CODE READABILITY)
+
+[TASK] :
+
+[COMPLETED] : TRUE 
+
